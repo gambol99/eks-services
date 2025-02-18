@@ -2,13 +2,15 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: applications-helm
+  name: helm-platform
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   goTemplate: true
-  ## Add a strategy that will only sync the resources that have changed
+
+  ## Add a strategy permiting us to control the ordering of resources
+  ## by using labelling.
   strategy:
     type: RollingSync
     rollingSync:
@@ -32,55 +34,52 @@ spec:
 
   # Generate applications from the shared services repository
   generators:
-    - merge:
-        mergeKeys:
-          - chart
-        generators:
-          - git:
-              repoURL: https://github.com/gambol99/eks-services.git
-              revision: HEAD
-              files:
-                - path: applications/**/helm.yaml
-          - list:
-              elements:
-                - environment: grn
-                  repository: https://github.com/gambol99/eks-services.git
-                  revision: HEAD
+    - git:
+        repoURL: https://github.com/gambol99/eks-services.git
+        revision: HEAD
+        files:
+          - path: "platform/**/grn.yaml"
+
+      ## Filter on only those files with the correct values
       selector:
         matchExpressions:
-          - key: helm.enable
-            operator: In
-            values: ["true"]
           - key: helm.chart
+            operator: Exists
+          - key: helm.version
+            operator: Exists
+          - key: helm.namespace
+            operator: Exists
+          - key: helm.repository
             operator: Exists
 
   ## Template out an application for each of the tenant applications
   template:
     metadata:
-      name: "applications-{{.path.basenameNormalized}}"
+      name: "{{ .project_name }} -{{.path.basenameNormalized}}"
       namespace: argocd
       labels:
-        phase: '{{default "tertiary" .sync.phase}}'
+        phase: "{{ default 'tertiary' .sync.phase }}"
       finalizers:
         - resources-finalizer.argocd.argoproj.io
 
     spec:
-      project: applications
+      project: platform
       sources:
-        - repoURL: "{{.helm.repository}}"
-          targetRevision: "{{.helm.version}}"
-          chart: "{{.helm.chart}}"
+        - repoURL: "{{ .helm.repository }}"
+          targetRevision: "{{ .helm.version }}"
+          chart: "{{ .helm.chart }}"
           helm:
             releaseName: "{{default .path.basenameNormalized .helm.releaseName}}"
             valueFiles:
-              - "$values/{{.path.basename}}/defaults.yaml"
-              - "$values/{{.path.basename}}/{{.environment}}.yaml"
+              - "$values/{{ .path.path }}/values/all.yaml"
+              - "$values/{{ .path.path }}/values/{{ .environment }}.yaml"
             ignoreMissingValueFiles: true
 
       ## Destination is the cluster to deploy to
       destination:
         server: https://kubernetes.default.svc
-        namespace: "{{.helm.namespace}}"
+        ## /applications/[1]/DIRECTORY/FILE.yaml
+        namespace: "{{ .path.path[1] }}"
 
       ## Sync policy for the application
       syncPolicy:

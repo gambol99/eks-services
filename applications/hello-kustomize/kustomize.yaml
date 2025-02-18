@@ -2,3 +2,4 @@ kustomize:
   name: hello-world
   enable: true
   namespace: hello-world
+  environments: [grn]

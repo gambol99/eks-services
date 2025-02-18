@@ -1,6 +1,4 @@
 helm:
-  enable: true
   repository: https://helm.github.io/examples
   chart: hello-world
-  version: 0.1.0
-  namespace: sonarqube
+  version: "0.1.0"
