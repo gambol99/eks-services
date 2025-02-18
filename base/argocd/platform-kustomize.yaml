@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: applications-kustomize
+  name: platform-kustomize
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -39,7 +39,7 @@ spec:
               repoURL: https://github.com/gambol99/eks-services.git
               revision: HEAD
               files:
-                - path: applications/**/kustomize.yaml
+                - path: platform/**/kustomize.yaml
           - list:
               elements:
                 - environment: grn
@@ -65,7 +65,7 @@ spec:
       finalizers:
         - resources-finalizer.argocd.argoproj.io
     spec:
-      project: applications
+      project: platform
       source:
         repoURL: "{{.repository}}"
         targetRevision: "{{.revision}}"

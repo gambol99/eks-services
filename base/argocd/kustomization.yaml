@@ -4,8 +4,10 @@ kind: Kustomization
 resources:
   - credentials.yaml
   - projects.yaml
-  #- platform.yaml
-  - applications.yaml
+  - platform-helm.yaml
+  - platform-kustomize.yaml
+  #- application-helm.yaml
+  #- application-kustomize.yaml
 ## Used to patch the environment
 #patches:
 #  - path: environment.json
