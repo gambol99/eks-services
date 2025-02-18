@@ -92,7 +92,7 @@ spec:
       destination:
         server: https://kubernetes.default.svc
         ## /applications/[1]/DIRECTORY/FILE.yaml
-        namespace: "{{ index .path.segments 1 }}"
+        namespace: "{{ default (index .path.segments 1) .helm.namespace }}"
 
       ## Sync policy for the application
       syncPolicy:

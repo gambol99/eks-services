@@ -56,8 +56,6 @@ spec:
     - group: "*"
       kind: "*"
   destinations:
-    - namespace: "!kube-system"
-      server: "*"
     - namespace: "!default"
       server: "*"
     - namespace: "!kube-public"
