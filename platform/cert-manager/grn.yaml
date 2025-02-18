@@ -1,6 +1,6 @@
 helm:
   repository: https://charts.jetstack.io
-  chart: jetstack
-  version: "1.17.1"
+  chart: cert-manager
+  version: "1.17.0"
 sync:
   duration: 20s
