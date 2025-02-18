@@ -37,7 +37,6 @@ spec:
   clusterResourceWhitelist:
     - group: "*"
       kind: "*"
-  syncWave: 1
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject

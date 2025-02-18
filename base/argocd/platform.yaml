@@ -36,9 +36,9 @@ spec:
     - matrix:
         - list:
             elements:
-              environment: CHANGE_ME
-              repository: CHANGE_ME
-              repository_revision: CHANGE_ME
+              environment: grn
+              repository: https://github.com/gambol99/eks-services
+              repository_revision: HEAD
         - git:
             repoURL: "{{.repository}}"
             revision: "{{.repository_revision }}"
