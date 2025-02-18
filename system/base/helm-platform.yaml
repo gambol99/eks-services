@@ -8,7 +8,6 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   goTemplate: true
-  goTemplateOptions: ["missingkey=error"]
 
   ## Add a strategy permiting us to control the ordering of resources
   ## by using labelling.
@@ -100,6 +99,10 @@ spec:
         automated:
           selfHeal: true
           prune: true
+        retry:
+          backoff:
+            duration: '{{ default "180s" .sync.retryBackoff }}'
+            maxDuration: '{{ default "5m" .sync.retryMaxDuration }}'
         # Use server-side apply for better efficiency and interop
         # between controllers making partial changes to manifests.
         # Also enable apply out of sync only rather than trying to
