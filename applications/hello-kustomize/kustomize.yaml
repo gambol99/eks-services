@@ -1,3 +1,2 @@
 kustomize:
   enable: true
-  environments: ["grn"]
