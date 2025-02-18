@@ -1,3 +1,4 @@
 kustomize:
   enable: true
-  environments: ["grn"]
+  repository:
+  revision:
