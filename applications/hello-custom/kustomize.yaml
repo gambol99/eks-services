@@ -1,4 +1,4 @@
 kustomize:
-  enable: true
+  enable: false
   repository:
   revision:
