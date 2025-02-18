@@ -15,13 +15,28 @@ commonLabels:
   environment: grn
   owenr: engineering
 
-patchesJSON6902:
-  - target:
+patches:
+  - path: helm.json
+    target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: ApplicationSet
+      name: helm-applications
+  - path: helm.json
+    target:
       group: argoproj.io
       version: v1alpha1
       kind: ApplicationSet
       name: helm-platform
-    patch: |
-      - op: replace
-        path: /spec/generators/0/git/files/0/path
-        value: "platform/**/grn.yaml"
+  - path: kustomize.json
+    target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: ApplicationSet
+      name: kustomize-applications
+  - path: kustomize.json
+    target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: ApplicationSet
+      name: kustomize-applications

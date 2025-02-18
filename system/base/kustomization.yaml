@@ -7,8 +7,6 @@ commonAnnotations:
 resources:
   - credentials.yaml
   - projects.yaml
-  #  - platform-helm.yaml
-  #  - platform-kustomize.yaml
-  # - application-helm.yaml
   - helm-platform.yaml
-  #- application-kustomize.yaml
+  - helm-applications.yaml
+  - kustomize-applications.yaml

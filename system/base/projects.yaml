@@ -9,7 +9,7 @@ spec:
   description: >
     The project used by all the tenant applications
   sourceRepos:
-    - "git@github.com:gambol99/eks-shared-services.git"
+    - "*"
   ## List of destinations we are permitted to create
   ## resources in
   destinations:
