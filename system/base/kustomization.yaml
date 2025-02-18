@@ -10,3 +10,4 @@ resources:
   - helm-platform.yaml
   - helm-applications.yaml
   - kustomize-applications.yaml
+  - kustomize-platform.yaml
