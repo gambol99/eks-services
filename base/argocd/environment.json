@@ -1,11 +1,21 @@
 [
   {
     "op": "add",
-    "path": "/spec/generators/0/matrix/generators/0/list/0/elements/0",
+    "path": "/spec/generators/0/git/repoURL",
+    "value": "https://github.com/gambol99/eks-services"
+  },
+  {
+    "op": "add",
+    "path": "/spec/generators/0/git/revision",
+    "value": "HEAD"
+  },
+  {
+    "op": "add",
+    "path": "/spec/generators/1/list/0/elements/0",
     "value": {
       "environment": "grn",
       "repository": "https://github.com/gambol99/eks-services",
-      "repository_revision": "HEAD"
+      "revision": "HEAD"
     }
   }
 ]
