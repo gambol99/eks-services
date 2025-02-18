@@ -1,4 +1,5 @@
 helm:
+  enable: true
   repository: oci://phx.ocir.io/some-tenancy/some-namespace
   chart: sonarqube
   version: 1.24.3
