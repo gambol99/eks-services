@@ -1,0 +1,4 @@
+helm:
+  repository: https://charts.jetstack.io
+  chart: jetstack
+  version: "1.17.1"
