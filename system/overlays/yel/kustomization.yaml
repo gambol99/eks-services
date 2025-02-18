@@ -12,7 +12,7 @@ commonAnnotations:
   app.kubernetes.io/environment: grn
 
 commonLabels:
-  environment: grn
+  environment: yel
   owenr: engineering
 
 patches:
