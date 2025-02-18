@@ -9,32 +9,70 @@ commonAnnotations:
   app.kubernetes.io/managed-by: argocd
   app.kubernetes.io/instance: argocd
   app.kubernetes.io/part-of: argocd
-  app.kubernetes.io/environment: grn
+  app.kubernetes.io/environment: yel
 
 commonLabels:
   environment: yel
   owenr: engineering
 
 patches:
-  - path: helm.json
+  - patch: |
+      - op: replace
+        path: /spec/generators/0/matrix/generators/0/git
+        value:
+          repoURL: https://github.com/gambol99/eks-services.git
+          revision: HEAD
+          files:
+            - path: applications/**/yel.yaml
+      - op: replace
+        path: /spec/generators/0/matrix/generators/1/list/elements/0
+        value:
+          environment: yel
+          repository: https://github.com/gambol99/eks-services.git
+          revision: HEAD
     target:
       group: argoproj.io
       version: v1alpha1
       kind: ApplicationSet
       name: helm-applications
-  - path: helm.json
+  - patch: |
+      - op: replace
+        path: /spec/generators/0/matrix/generators/0/git
+        value:
+          repoURL: https://github.com/gambol99/eks-services.git
+          revision: HEAD
+          files:
+            - path: platform/**/yel.yaml
+      - op: replace
+        path: /spec/generators/0/matrix/generators/1/list/elements/0
+        value:
+          environment: yel
+          repository: https://github.com/gambol99/eks-services.git
+          revision: HEAD
     target:
       group: argoproj.io
       version: v1alpha1
       kind: ApplicationSet
       name: helm-platform
-  - path: kustomize.json
+  - patch: |
+      - op: replace
+        path: /spec/generators/0/matrix/generators/1/list/elements/0
+        value:
+          environment: yel
+          repository: https://github.com/gambol99/eks-services.git
+          revision: HEAD
     target:
       group: argoproj.io
       version: v1alpha1
       kind: ApplicationSet
       name: kustomize-applications
-  - path: kustomize.json
+  - patch: |
+      - op: replace
+        path: /spec/generators/0/matrix/generators/1/list/elements/0
+        value:
+          environment: yel
+          repository: https://github.com/gambol99/eks-services.git
+          revision: HEAD
     target:
       group: argoproj.io
       version: v1alpha1
