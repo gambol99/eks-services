@@ -45,15 +45,15 @@ spec:
                 - environment: grn
                   repository: https://github.com/gambol99/eks-services.git
                   revision: HEAD
-  #      selector:
-  #        matchExpressions:
-  #          - key: kustomize.enable
-  #            operator: In
-  #            values: ["true"]
-  #          - key: kustomize.namespace
-  #            operator: Exists
-  #          - key: kustomize.name
-  #            operator: Exists
+      selector:
+        matchExpressions:
+          - key: kustomize.enable
+            operator: In
+            values: ["true"]
+          - key: kustomize.namespace
+            operator: Exists
+          - key: kustomize.name
+            operator: Exists
   ## Template out an application for each of the tenant applications
   template:
     metadata:
