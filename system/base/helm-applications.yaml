@@ -83,9 +83,12 @@ spec:
           helm:
             releaseName: "{{default .path.basenameNormalized .helm.releaseName}}"
             valueFiles:
-              - "{{ .path.path }}/values/all.yaml"
-              - "{{ .path.path }}/values/{{ .environment }}.yaml"
+              - "$values/{{ .path.path }}/values/all.yaml"
+              - "$values/{{ .path.path }}/values/{{ .environment }}.yaml"
             ignoreMissingValueFiles: true
+        - repoURL: "{{ .repository }}"
+          targetRevision: "{{ .revision }}"
+          ref: values
 
       ## Destination is the cluster to deploy to
       destination:
