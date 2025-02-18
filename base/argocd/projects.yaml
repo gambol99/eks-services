@@ -1,0 +1,69 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: applications
+  namespace: argocd
+  labels:
+    phase: primary
+spec:
+  description: >
+    The project used by all the tenant applications
+  sourceRepos:
+    - "git@github.com:gambol99/eks-shared-services.git"
+  ## List of destinations we are permitted to create
+  ## resources in
+  destinations:
+    - namespace: "!kube-system"
+      server: "*"
+    - namespace: "!default"
+      server: "*"
+    - namespace: "!kube-public"
+      server: "*"
+    - namespace: "!kube-node-lease"
+      server: "*"
+    - namespace: "*"
+      server: https://kubernetes.default.svc
+  ## List of resources we are not permitted to create
+  clusterResourceBlacklist:
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+    - group: apps
+      kind: Daemonsets
+    - group: kyverno
+      kind: ClusterPolicy
+  ## List of resources we are permitted to create
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  syncWave: 1
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+  labels:
+    phase: primary
+spec:
+  description: >
+    The project used to configure additional platform level resources
+  sourceRepos:
+    - "*"
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  destinations:
+    - namespace: "!kube-system"
+      server: "*"
+    - namespace: "!default"
+      server: "*"
+    - namespace: "!kube-public"
+      server: "*"
+    - namespace: "!kube-node-lease"
+      server: "*"
+    - namespace: "*"
+      server: "*"

@@ -1,0 +1,181 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: applications-helm
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  goTemplate: true
+
+  ## Add a strategy that will only sync the resources that have changed
+  strategy:
+    type: RollingSync
+    rollingSync:
+      steps:
+        - matchExpressions:
+            - key: phase
+              operator: In
+              values:
+                - primary
+        - matchExpressions:
+            - key: phase
+              operator: In
+              values:
+                - secondary
+        - matchExpressions:
+            - key: phase
+              operator: NotIn
+              values:
+                - primary
+                - secondary
+
+  # Generate applications from the shared services repository
+  generators:
+    - matrix:
+        - list:
+            elements:
+              environment: CHANGE_ME
+              repository: CHANGE_ME
+              repository_revision: CHANGE_ME
+        - git:
+            repoURL: "{{.repository}}"
+            revision: "{{.repository_revision }}"
+            files:
+              - path: applications/**/helm.yaml
+      selector:
+        matchExpressions:
+          - key: helm.enable
+            operator: In
+            values: ["true"]
+          - key: values
+            operator: Exists
+
+  ## Template out an application for each of the tenant applications
+  template:
+    metadata:
+      name: "{{.path.basenameNormalized}}"
+      namespace: argocd
+      labels:
+        phase: '{{default "tertiary" .sync.phase}}'
+        environment: "{{.environment}}"
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: applications
+      sources:
+        - repoURL: "{{.helm.repository}}"
+          targetRevision: "{{.helm.version}}"
+          chart: "{{.helm.chart}}"
+          helm:
+            releaseName: "{{default .path.basenameNormalized .helm.releaseName}}"
+            valueFiles:
+              - "$values/{{.path.basename}}/defaults.yaml"
+              - "$values/{{.path.basename}}/{{.environment}}.yaml"
+            ignoreMissingValueFiles: true
+      ## Destination is the cluster to deploy to
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{.helm.namespace}}"
+      ## Sync policy for the application
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        # Use server-side apply for better efficiency and interop
+        # between controllers making partial changes to manifests.
+        # Also enable apply out of sync only rather than trying to
+        # apply all resources in the application.
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - ApplyOutOfSyncOnly=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: applications-kustomize
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  goTemplate: true
+  ## Add a strategy that will only sync the resources that have changed
+  strategy:
+    type: RollingSync
+    rollingSync:
+      steps:
+        - matchExpressions:
+            - key: phase
+              operator: In
+              values:
+                - primary
+        - matchExpressions:
+            - key: phase
+              operator: In
+              values:
+                - secondary
+        - matchExpressions:
+            - key: phase
+              operator: NotIn
+              values:
+                - primary
+                - secondary
+  # Generate applications from the shared services repository
+  generators:
+    - matrix:
+        - list:
+            elements:
+              environment: CHANGE_ME
+              repository: CHANGE_ME
+              repository_revision: CHANGE_ME
+        - git:
+            repoURL: "{{.repository}}"
+            revision: "{{.repository_revision }}"
+            files:
+              - path: applications/**/kustomize.yaml
+      selector:
+        matchExpressions:
+          - key: kustomize.enable
+            operator: In
+            values: ["true"]
+          - key: kustomize.namespace
+            operator: Exists
+          - key: kustomize
+            operator: Exists
+  ## Template out an application for each of the tenant applications
+  template:
+    metadata:
+      name: "{{.path.basenameNormalized}}"
+      namespace: argocd
+      labels:
+        phase: '{{default "tertiary" .sync.phase}}'
+        environment: "{{.environment}}"
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: applications
+      sources:
+        - kustomize:
+            repoURL: "{{.repository}}"
+            revision: "{{.repository_revision }}"
+            files:
+              - path: applications/**/overlays/{{.environment}}/kustomization.yaml
+      ## Destination is the cluster to deploy to
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{.kustomize.namespace}}"
+      ## Sync policy for the application
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        # Use server-side apply for better efficiency and interop
+        # between controllers making partial changes to manifests.
+        # Also enable apply out of sync only rather than trying to
+        # apply all resources in the application.
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - ApplyOutOfSyncOnly=true

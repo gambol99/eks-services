@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - credentials.yaml
+  - projects.yaml
+  - platform.yaml
+  - applications.yaml
+
+## Used to patch the environment
+patches:
+  - path: environment.patch
+    target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: applications-helm
+  - path: environment.patch
+    target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: applications-kustomize
+  - path: environment.patch
+    target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: platform-helm
+  - path: environment.patch
+    target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: platform-kustomize

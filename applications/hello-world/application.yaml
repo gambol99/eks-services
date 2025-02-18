@@ -1,0 +1,9 @@
+helm:
+  repository: oci://phx.ocir.io/some-tenancy/some-namespace
+  chart: sonarqube
+  version: 1.24.3
+  namespace: sonarqube
+
+values:
+  controller:
+    hello: world

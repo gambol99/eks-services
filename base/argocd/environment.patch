@@ -1,0 +1,8 @@
+spec:
+  generators:
+    - matrix:
+        - list:
+            elements:
+              environment: grn
+              repository: https://github.com/gambol99/eks-services
+              repository_revision: HEAD
