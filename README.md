@@ -9,6 +9,8 @@ This repository contains a demo of how to use ArgoCD to manage applications acro
 - Onboarding should be configuration driven.
 - Teams are only exposed the minimum amount of variabes to get the applications in.
 - Teams should not need the assistance of the platform team to deploy or promote their applications.
+- We want to support Helm and Kustomize only for a application deployments.
+- We want to support external repositories, allowing teams to take full control.
 
 ## Key Points
 
