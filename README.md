@@ -11,6 +11,7 @@ This repository contains a demo of how to use ArgoCD to manage applications acro
 - Teams should not need the assistance of the platform team to deploy or promote their applications.
 - We want to support Helm and Kustomize only for a application deployments.
 - We want to support external repositories, allowing teams to take full control.
+- Applications should run under difference permissions.
 
 ## Key Points
 
