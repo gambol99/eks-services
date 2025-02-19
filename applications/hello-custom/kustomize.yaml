@@ -1,2 +1,4 @@
 kustomize:
   repository: https://github.com/gambol99/custom-kustomize.git
+  environments:
+    yel: yel
