@@ -40,7 +40,7 @@ The following setup simulates two environments, `grn` and `yel`, using the same 
 
 1. Create a kind cluster via `kind create cluster --name grn`
 2. Create a new namespace via `kubectl create namespace argocd`
-3. Install ArgoCD via `kubectl -n argocd apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`
+3. Install ArgoCD via `kubectl kustomize --enable-helm=true system/overlays/yel | kubectl apply -f -`
 4. Onboard the Application Sets with kustomize via `kubectl apply -k system/overlays/grn`
 5. Do the same for the Yellow environment, create a kind cluster named `yel` and apply the same steps above.
 6. Onboard the Application Sets with kustomize via `kubectl apply -k system/overlays/yel`
@@ -181,7 +181,7 @@ metadata:
   annotations:
     argocd.argoproj.io/cluster: grn
     environment: grn
-    platform_revision: git+sha1 
+    platform_revision: git+sha1
     platform_repository: https://github.com/gambol99/eks-services
 dataString:
   name: grn
@@ -191,24 +191,24 @@ dataString:
 2. We could then update the application set to use the cluster secret.
 
 ```yaml
-  generators:
-    - matrix:
-        generators:
-          - git:
-              repoURL: https://github.com/gambol99/eks-services.git
-              revision: HEAD
-              files:
-                - path: "applications/**/kustomize.yaml"
-          - list:
-              elements:
-                - environment: grn
-                  repository: https://github.com/gambol99/eks-services.git
-                  revision: HEAD
-          - cluster:
-              selector:
-                matchAnnotations:
-                  - key: environment
-                    operator: Exists
+generators:
+  - matrix:
+      generators:
+        - git:
+            repoURL: https://github.com/gambol99/eks-services.git
+            revision: HEAD
+            files:
+              - path: "applications/**/kustomize.yaml"
+        - list:
+            elements:
+              - environment: grn
+                repository: https://github.com/gambol99/eks-services.git
+                revision: HEAD
+        - cluster:
+            selector:
+              matchAnnotations:
+                - key: environment
+                  operator: Exists
 ```
 
 We can then reference the cluster annotations in the application set.
