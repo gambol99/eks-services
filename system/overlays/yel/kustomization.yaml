@@ -16,7 +16,12 @@ commonLabels:
   owner: engineering
 
 patches:
-  - patch: |
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: ApplicationSet
+      name: helm-applications
+    patch: |
       - op: replace
         path: /spec/generators/0/matrix/generators/0/git
         value:
@@ -30,12 +35,13 @@ patches:
           environment: yel
           repository: https://github.com/gambol99/eks-services.git
           revision: HEAD
-    target:
+
+  - target:
       group: argoproj.io
       version: v1alpha1
       kind: ApplicationSet
-      name: helm-applications
-  - patch: |
+      name: helm-platform
+    patch: |
       - op: replace
         path: /spec/generators/0/matrix/generators/0/git
         value:
@@ -49,19 +55,21 @@ patches:
           environment: yel
           repository: https://github.com/gambol99/eks-services.git
           revision: HEAD
-    target:
+
+  - target:
       group: argoproj.io
       version: v1alpha1
       kind: ApplicationSet
-      name: helm-platform
-  - patch: |
+      name: kustomize-applications
+    patch: |
       - op: replace
         path: /spec/generators/0/matrix/generators/1/list/elements/0
         value:
           environment: yel
           repository: https://github.com/gambol99/eks-services.git
           revision: HEAD
-    target:
+
+  - target:
       group: argoproj.io
       version: v1alpha1
       kind: ApplicationSet
@@ -73,8 +81,3 @@ patches:
           environment: yel
           repository: https://github.com/gambol99/eks-services.git
           revision: HEAD
-    target:
-      group: argoproj.io
-      version: v1alpha1
-      kind: ApplicationSet
-      name: kustomize-applications
