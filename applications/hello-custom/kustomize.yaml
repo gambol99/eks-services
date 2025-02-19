@@ -1,4 +1,3 @@
 kustomize:
-  enable: false
-  repository:
-  revision:
+  enable: true
+  repository: https://github.com/gambol99/custom-kustomize.git
