@@ -33,6 +33,14 @@ spec:
       kind: Daemonsets
     - group: kyverno
       kind: ClusterPolicy
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+    - kind: RuntimeClass
+      group: node.k8s.io
+    - kind: ValidatingWebhookConfiguration
+      group: admissionregistration.k8s.io
+    - kind: MutatingWebhookConfiguration
+      group: admissionregistration.k8s.io
   ## List of resources we are permitted to create
   clusterResourceWhitelist:
     - group: "*"
