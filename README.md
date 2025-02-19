@@ -4,6 +4,12 @@
 
 This repository contains a demo of how to use ArgoCD to manage applications across different environments. We are assuming here we have an environment, two clusters made up of green and yellow stages, and we a self service platform that allows our development teams to deploy their applications to the clusters.
 
+## Requirements
+
+- Onboarding should be configuration driven.
+- Teams are only exposed the minimum amount of variabes to get the applications in.
+- Teams should not need the assistance of the platform team to deploy or promote their applications.
+
 ## Key Points
 
 - We support two projects, `applications` and `platform`.
