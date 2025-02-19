@@ -155,3 +155,61 @@ The repository revision used will be the environment name. So in the green envir
 ## Restrictions on Applications
 
 The following restrictions are applied to all applications, helm and kustomize via the [AppProject resource](./system/base/projects.yaml).
+
+## Potential Improvements
+
+### Remove the environment from the application sets
+
+1. We could create a Cluster, adding the information we need as annotations on the cluster resource.
+
+Create a secret representing the cluster.
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grn-cluster
+  annotations:
+    argocd.argoproj.io/cluster: grn
+    environment: grn
+    platform_revision: git+sha1 
+    platform_repository: https://github.com/gambol99/eks-services
+dataString:
+  name: grn
+  server: https://kubernetes.default.svc
+```
+
+2. We could then update the application set to use the cluster secret.
+
+```yaml
+  generators:
+    - matrix:
+        generators:
+          - git:
+              repoURL: https://github.com/gambol99/eks-services.git
+              revision: HEAD
+              files:
+                - path: "applications/**/kustomize.yaml"
+          - list:
+              elements:
+                - environment: grn
+                  repository: https://github.com/gambol99/eks-services.git
+                  revision: HEAD
+          - cluster:
+              selector:
+                matchAnnotations:
+                  - key: environment
+                    operator: Exists
+```
+
+We can then reference the cluster annotations in the application set.
+
+```yaml
+spec:
+  project: applications
+  source:
+    repoURL: "{{ default .repository .kustomize.repository }}"
+    targetRevision: "{{ default .revision (get .kustomize.revisions .platform_environment) }}"
+    path: "{{ .path.path }}/overlays/{{ .platform_environment }}"
+    kustomize: {}
+```
