@@ -13,7 +13,7 @@ commonAnnotations:
 
 commonLabels:
   environment: yel
-  owenr: engineering
+  owner: engineering
 
 patches:
   - patch: |

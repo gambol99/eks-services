@@ -13,7 +13,7 @@ commonAnnotations:
 
 commonLabels:
   environment: grn
-  owenr: engineering
+  owner: engineering
 
 patches:
   - patch: |
