@@ -72,7 +72,12 @@ spec:
       project: applications
       source:
         repoURL: "{{ default .repository .kustomize.repository }}"
-        targetRevision: "{{ default .revision .kustomize.revision }}"
+        ##
+        ## kustomize:
+        ##   revisions:
+        ##     grn: git+sha1
+        ##     yel: git+sha1
+        targetRevision: "{{ default .revision (get kustomize.revisions .environment) }}"
         path: "{{ .path.path }}/overlays/{{ .environment }}"
         kustomize: {}
 
