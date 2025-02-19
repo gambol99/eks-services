@@ -68,12 +68,24 @@ patches:
           environment: grn
           repository: https://github.com/gambol99/eks-services.git
           revision: HEAD
+      - op: replace
+        path: /spec/generators/0/selector/matchExpressions/0/key
+        value: kustomize.revisions.grn
+      - op: replace
+        path: /spec/generators/1/matrix/generators/1/list/elements/0
+        value:
+          environment: grn
+          repository: https://github.com/gambol99/eks-services.git
+          revision: HEAD
+      - op: replace
+        path: /spec/generators/1/selector/matchExpressions/1/key
+        value: kustomize.environments.grn
 
   - target:
       group: argoproj.io
       version: v1alpha1
       kind: ApplicationSet
-      name: kustomize-applications
+      name: kustomize-platform
     patch: |
       - op: replace
         path: /spec/generators/0/matrix/generators/1/list/elements/0
@@ -81,3 +93,15 @@ patches:
           environment: grn
           repository: https://github.com/gambol99/eks-services.git
           revision: HEAD
+      - op: replace
+        path: /spec/generators/0/selector/matchExpressions/0/key
+        value: kustomize.revisions.grn
+      - op: replace
+        path: /spec/generators/1/matrix/generators/1/list/elements/0
+        value:
+          environment: grn
+          repository: https://github.com/gambol99/eks-services.git
+          revision: HEAD
+      - op: replace
+        path: /spec/generators/1/selector/matchExpressions/1/key
+        value: kustomize.environments.grn

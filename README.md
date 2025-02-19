@@ -38,12 +38,9 @@ The following setup simulates two environments, `grn` and `yel`, using the same 
 
 ### Building the Green Environment
 
-1. Create a kind cluster via `kind create cluster --name grn`
-2. Create a new namespace via `kubectl create namespace argocd`
-3. Install ArgoCD via `kubectl -n argocd apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`
-4. Onboard the Application Sets with kustomize via `kubectl apply -k system/overlays/grn`
-5. Do the same for the Yellow environment, create a kind cluster named `yel` and apply the same steps above.
-6. Onboard the Application Sets with kustomize via `kubectl apply -k system/overlays/yel`
+You can build an environment, provisioning two clusters for `grn` and `yel` via
+
+1. Run `make dev`
 
 ## Provision an Helm Application
 

@@ -76,8 +76,6 @@ spec:
         app.kubernetes.io/environment: "{{ .environment }}"
         app.kubernetes.io/type: helm
         phase: '{{ default "tertiary" .sync.phase }}'
-      finalizers:
-        - resources-finalizer.argocd.argoproj.io
 
     spec:
       project: platform

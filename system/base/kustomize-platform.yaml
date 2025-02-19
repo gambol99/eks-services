@@ -45,6 +45,30 @@ spec:
                 - environment: grn
                   repository: https://github.com/gambol99/eks-services.git
                   revision: HEAD
+      ## Filter on only those files with the correct values
+      selector:
+        matchExpressions:
+          - key: kustomize.revisions.grn
+            operator: Exists
+    - matrix:
+        generators:
+          - git:
+              repoURL: https://github.com/gambol99/eks-services.git
+              revision: HEAD
+              files:
+                - path: "platform/**/kustomize.yaml"
+          - list:
+              elements:
+                - environment: grn
+                  repository: https://github.com/gambol99/eks-services.git
+                  revision: HEAD
+      ## Filter on only those files with the correct values
+      selector:
+        matchExpressions:
+          - key: kustomize.repository
+            operator: Exists
+          - key: kustomize.environments.grn
+            operator: Exists
 
   ## Sync Policy for the ApplicationSet
   syncPolicy:
@@ -66,11 +90,9 @@ spec:
         app.kubernetes.io/environment: "{{ .environment }}"
         app.kubernetes.io/type: kustomize
         phase: '{{ default "tertiary" .sync.phase }}'
-      finalizers:
-        - resources-finalizer.argocd.argoproj.io
 
     spec:
-      project: applications
+      project: platform
       source:
         repoURL: "{{ default .repository .kustomize.repository }}"
         ##
@@ -108,7 +130,7 @@ spec:
     {{ if .kustomize.repository }}
     spec:
       source:
-        targetRevision: "{{ .environment }}"
+        targetRevision: "{{ get .kustomize.environments .environment }}"
     {{ else }}
     spec:
       source:
