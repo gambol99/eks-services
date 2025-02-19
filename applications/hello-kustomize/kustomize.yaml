@@ -1,5 +1,4 @@
 kustomize:
   enable: true
   revisions:
-    grn: git+sha1
     yel: git+sha1
