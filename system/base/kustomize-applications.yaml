@@ -72,7 +72,12 @@ spec:
       project: applications
       source:
         repoURL: "{{ default .repository .kustomize.repository }}"
-        targetRevision: "{{ default .revision .kustomize.revision }}"
+        ##
+        ## kustomize:
+        ##   revisions:
+        ##     grn: git+sha1
+        ##     yel: git+sha1
+        targetRevision: "{{ default .revision (get kustomize.revisions .environment) }}"
         path: "{{ .path.path }}/overlays/{{ .environment }}"
         kustomize: {}
 
@@ -95,3 +100,12 @@ spec:
           - CreateNamespace=true
           - ServerSideApply=true
           - ApplyOutOfSyncOnly=true
+
+  ## If a kustomize.repository is defines we use the environment as the targetRevision. Its
+  ## the responsibility of the repository to control the floating revisions.
+  templatePatch: |
+    {{ if .kustomize.repository }}
+    spec:
+      source:
+        targetRevision: "{{ .environment }}"
+    {{ end }}
