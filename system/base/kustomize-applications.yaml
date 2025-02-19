@@ -45,12 +45,6 @@ spec:
                 - environment: grn
                   repository: https://github.com/gambol99/eks-services.git
                   revision: HEAD
-      ## Filter on only those files with the correct values
-      selector:
-        matchExpressions:
-          - key: kustomize.enable
-            operator: In
-            values: ["true"]
 
   ## Template out an application for each of the tenant applications
   template:
@@ -77,7 +71,7 @@ spec:
         ##   revisions:
         ##     grn: git+sha1
         ##     yel: git+sha1
-        targetRevision: "{{ default .revision (get kustomize.revisions .environment) }}"
+        targetRevision: "{{ default .revision (get .kustomize.revisions .environment) }}"
         path: "{{ .path.path }}/overlays/{{ .environment }}"
         kustomize: {}
 
