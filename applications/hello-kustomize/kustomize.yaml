@@ -1,3 +1,0 @@
-kustomize:
-  revisions:
-    yel: git+sha1
