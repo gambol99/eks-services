@@ -8,6 +8,7 @@ resources:
   - credentials.yaml
   - cluster.yaml
   - projects.yaml
+  - tenant-namespace.yaml
   - helm-platform.yaml
   - helm-applications.yaml
   - kustomize-applications.yaml
