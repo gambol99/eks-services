@@ -60,7 +60,7 @@ spec:
   ## Template out an application for each of the tenant applications
   template:
     metadata:
-      name: "applications-{{.path.basenameNormalized}}"
+      name: "applications-{{ .path.basenameNormalized }}"
       namespace: argocd
       labels:
         app.kubernetes.io/name: argocd
@@ -80,7 +80,7 @@ spec:
           targetRevision: "{{ .helm.version }}"
           chart: "{{ .helm.chart }}"
           helm:
-            releaseName: "{{default .path.basenameNormalized .helm.releaseName}}"
+            releaseName: "{{ default .path.basenameNormalized .helm.releaseName }}"
             valueFiles:
               - "$values/{{ .path.path }}/values/all.yaml"
               - "$values/{{ .path.path }}/values/{{ .environment }}.yaml"
