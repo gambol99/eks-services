@@ -112,18 +112,11 @@ resources:
 ```
 
 4. Add your kustomize resources to the `applications/myapp/base` directory.
-5. Enable the kustomize application by creating a `kustomize.yaml` file in the `applications/myapp` directory.
+5. Enable the kustomize application by creating a `grn.yaml` file in the `applications/myapp` directory.
 
 ```yaml
 kustomize:
-```
-
-Note, by default the revision is always HEAD, so you have to be careful as multiple changes can be promoted to the same environment. An alterative is to control the revision via a git sha
-
-```yaml
-kustomize:
-  revisions:
-    yel: git+sha1
+  revision: HEAD
 ```
 
 Here you can make changes the files, and promote by updating the sha1 for a specific environment. The Application is templated out using the following
@@ -131,12 +124,7 @@ Here you can make changes the files, and promote by updating the sha1 for a spec
 ```yaml
 source:
   repoURL: "{{ default .repository .kustomize.repository }}"
-  ##
-  ## kustomize:
-  ##   revisions:
-  ##     grn: git+sha1
-  ##     yel: git+sha1
-  targetRevision: "{{ default .revision (get kustomize.revisions .environment) }}"
+  targetRevision: "{{ .kustomize.revisions }}"
   path: "{{ .path.path }}/overlays/{{ .environment }}"
   kustomize: {}
 ```

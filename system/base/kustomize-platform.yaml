@@ -5,6 +5,11 @@ metadata:
   name: kustomize-platform
   namespace: argocd
   annotations:
+    app.kubernetes.io/component: ApplicationSet
+    app.kubernetes.io/instance: argocd
+    app.kubernetes.io/managed-by: argocd
+    app.kubernetes.io/name: argocd
+    app.kubernetes.io/part-of: argocd
     argocd.argoproj.io/sync-wave: "1"
 spec:
   goTemplate: true
@@ -33,40 +38,19 @@ spec:
 
   # Generate applications from the shared services repository
   generators:
-    - matrix:
-        generators:
-          - git:
-              repoURL: https://github.com/gambol99/eks-services.git
-              revision: HEAD
-              files:
-                - path: "platform/**/kustomize.yaml"
-              values:
-                environment: grn
-                repository: https://github.com/gambol99/eks-services.git
-                revision: HEAD
+    - git:
+        repoURL: https://github.com/gambol99/eks-services.git
+        revision: HEAD
+        files:
+          - path: "platform/**/grn.yaml"
+        values:
+          environment: grn
+          repository: https://github.com/gambol99/eks-services.git
+          revision: HEAD
       ## Filter on only those files with the correct values
       selector:
         matchExpressions:
-          - key: kustomize.revisions.grn
-            operator: Exists
-
-    - matrix:
-        generators:
-          - git:
-              repoURL: https://github.com/gambol99/eks-services.git
-              revision: HEAD
-              files:
-                - path: "platform/**/kustomize.yaml"
-              values:
-                environment: grn
-                repository: https://github.com/gambol99/eks-services.git
-                revision: HEAD
-      ## Filter on only those files with the correct values
-      selector:
-        matchExpressions:
-          - key: kustomize.repository
-            operator: Exists
-          - key: kustomize.environments.grn
+          - key: kustomize.revision
             operator: Exists
 
   ## Sync Policy for the ApplicationSet
@@ -127,5 +111,5 @@ spec:
     {{ else }}
     spec:
       source:
-        targetRevision: "{{ default .values.revision (get .kustomize.revisions .values.environment) }}"
+        targetRevision: "{{ .kustomize.revisions }}"
     {{ end }}

@@ -36,4 +36,4 @@ setup_cluster "grn" || {
   exit 1
 }
 
-echo "Setup completed successfully!"
+echo "Setup completed successfully! (currently on 'grn' cluster)"
