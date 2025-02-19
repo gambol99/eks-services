@@ -71,7 +71,6 @@ spec:
         ##   revisions:
         ##     grn: git+sha1
         ##     yel: git+sha1
-        targetRevision: "{{ default .revision (get .kustomize.revisions .environment) }}"
         path: "{{ .path.path }}/overlays/{{ .environment }}"
         kustomize: {}
 
@@ -102,4 +101,8 @@ spec:
     spec:
       source:
         targetRevision: "{{ .environment }}"
+    {{ else }}
+    spec:
+      source:
+        targetRevision: "{{ default .revision (get .kustomize.revisions .environment) }}"
     {{ end }}

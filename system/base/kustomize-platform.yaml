@@ -102,4 +102,8 @@ spec:
     spec:
       source:
         targetRevision: "{{ .environment }}"
+    {{ else }}
+    spec:
+      source:
+        targetRevision: "{{ default .revision (get .kustomize.revisions .environment) }}"
     {{ end }}
