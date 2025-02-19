@@ -6,6 +6,7 @@ commonAnnotations:
 
 resources:
   - credentials.yaml
+  - cluster.yaml
   - projects.yaml
   - helm-platform.yaml
   - helm-applications.yaml

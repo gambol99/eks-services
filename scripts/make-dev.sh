@@ -27,13 +27,12 @@ setup_cluster() {
 # Main execution
 echo "Provisioning development clusters..."
 
-# Setup yellow cluster
-setup_cluster "grn" || {
-  echo "Failed to setup green cluster"
-  exit 1
-}
 setup_cluster "yel" || {
   echo "Failed to setup yellow cluster"
+  exit 1
+}
+setup_cluster "grn" || {
+  echo "Failed to setup green cluster"
   exit 1
 }
 
