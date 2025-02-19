@@ -46,6 +46,13 @@ spec:
                   repository: https://github.com/gambol99/eks-services.git
                   revision: HEAD
 
+  ## Sync Policy for the ApplicationSet
+  syncPolicy:
+    # Prevents ApplicationSet controller from modifying Applications. Delete is allowed.
+    applicationsSync: create-delete
+    # Prevent an Application's child resources from being deleted, when the parent Application is deleted
+    # preserveResourcesOnDeletion: true
+
   ## Template out an application for each of the tenant applications
   template:
     metadata:

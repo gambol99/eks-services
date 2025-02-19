@@ -15,6 +15,8 @@ spec:
   destinations:
     - namespace: "!kube-system"
       server: "*"
+    - namespace: "!argocd"
+      server: "*"
     - namespace: "!default"
       server: "*"
     - namespace: "!kube-public"
@@ -69,6 +71,8 @@ spec:
     - namespace: "!kube-public"
       server: "*"
     - namespace: "!kube-node-lease"
+      server: "*"
+    - namespace: "!argocd"
       server: "*"
     - namespace: "*"
       server: "*"
