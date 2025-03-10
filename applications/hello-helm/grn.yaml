@@ -2,3 +2,7 @@ helm:
   repository: https://helm.github.io/examples
   chart: hello-world
   version: "0.1.0"
+
+kustomize:
+  path: base
+  revision: >fdfd
